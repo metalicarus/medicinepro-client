@@ -225,8 +225,8 @@ import config from "@/config";
 import json from "@/data/pulmonaryDuplicated.json";
 import BaseTable from "@/components/BaseTable";
 import BaseInput from "@/components/Inputs/BaseInput";
-import KeysList from "@/pages/Dashboard/KeysList";
-import Expand from "@/pages/Dashboard/Expand";
+import KeysList from "@/components/KeysList";
+import Expand from "@/components/Expand";
 export default {
   components: {
     Expand,

@@ -5,6 +5,10 @@
         <i class="tim-icons icon-chart-pie-36"></i>
         <p>Dashboard</p>
       </sidebar-link>
+      <sidebar-link to="/fisio-vr">
+        <i class="tim-icons icon-sound-wave" />
+        <p>Fisio-VR</p>
+      </sidebar-link>
     </side-bar>
     <sidebar-share :background-color.sync="backgroundColor"></sidebar-share>
 
@@ -21,7 +25,6 @@ import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./DashboardContent.vue";
 import SidebarShare from "./SidebarSharePlugin.vue";
-import MobileMenu from "./MobileMenu.vue";
 import SideBar from "@/components/SidebarPlugin/SideBar.vue";
 import SidebarLink from "@/components/SidebarPlugin/SidebarLink.vue";
 
@@ -30,7 +33,6 @@ export default {
     TopNavbar,
     DashboardContent,
     ContentFooter,
-    MobileMenu,
     SideBar,
     SidebarLink,
     SidebarShare

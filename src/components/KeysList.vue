@@ -48,10 +48,8 @@ export default {
         });
       } else {
         this.checked.push(key);
-        if (this.limit !== 0 && this.checked.length >= this.limit) {
-          this.$emit("update:keylist", this.checked);
-        }
       }
+      this.$emit("update:keylist", this.checked);
     }
   }
 };

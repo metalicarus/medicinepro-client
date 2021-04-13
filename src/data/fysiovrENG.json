@@ -1,0 +1,27 @@
+{
+  "PlayerName": "Jogador",
+  "PlayerAge": 0,
+  "MinimumAngleSelected": 15.0,
+  "MinimumTimeToValidateInput": 1.0,
+  "GameDifficulty": 2,
+  "MinigamesUsedInSession": [
+    0
+  ],
+  "AngleOnEveryInput": [],
+  "DirectionOnEveryInput": [],
+  "PositionOfEveryObjectSpawned": [
+    "Esquerda",
+    "Cima",
+    "Todas",
+    "Baixo",
+    "Esquerda",
+    "Baixo",
+    "Cima"
+  ],
+  "AmountOfSuccessfulInputOnSession": 0,
+  "AmountOfUnsuccessfulInputsOnSession": 5,
+  "TimeAtBeginningOfSession": "2020-01-17T18:44:35",
+  "TotalSessionTime": 0.5,
+  "SessionScore": 0.0,
+  "AngleDeltaAverage": 0.0
+}
