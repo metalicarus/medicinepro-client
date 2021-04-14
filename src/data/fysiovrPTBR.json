@@ -9,26 +9,20 @@
   "Dificuldade": 2,
   "MinijogoDestaSessao": 0,
   "SelecaoDeMinijogos": 0,
-  "AnguloDeCadaMovimento": [],
-  "DirecaoDeCadaMovimento": [],
+  "AnguloDeCadaMovimento": [
+    90, 180, 10, 90, 180, 45, 60, 90
+  ],
+  "DirecaoDeCadaMovimento": [
+    "Atras","Atras","Atras","Atras","Atras","Atras","Atras","Atras","Atras",
+    "Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente","Frente",
+    "Direita","Direita","Direita","Direita","Direita","Direita","Direita","Direita","Direita","Direita","Direita",
+    "Esquerda","Esquerda","Esquerda","Esquerda","Esquerda",
+    "Todas","Todas","Todas","Todas","Todas"
+  ],
   "PosicaoDeCadaMovimento": [
-    "Frente",
-    "Direita",
-    "Frente",
-    "Esquerda",
-    "Atras",
-    "Frente",
-    "Esquerda",
-    "Atras",
-    "Direita",
-    "Frente",
-    "Atras",
-    "Direita",
-    "Frente",
-    "Atras",
-    "Esquerda",
-    "Frente",
-    "Atras"
+    "Frente", "Direita", "Frente", "Esquerda", "Atras", "Frente",
+    "Esquerda", "Atras", "Direita", "Frente", "Atras", "Direita",
+    "Frente", "Atras", "Esquerda", "Frente", "Atras"
   ],
   "QuantidadeDeAcertos": 0,
   "QuantidadeDeErros": 12,

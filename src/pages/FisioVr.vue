@@ -86,7 +86,19 @@
                   v-for="property in joinProperties"
                   :key="property"
                 >
-                  <repetition-graph
+                  <repetition-bar-chart
+                    :title="property"
+                    :values="getJsonValueByArrayProperty(property)"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  class="col-sm-12 col-lg-3"
+                  v-for="property in joinProperties"
+                  :key="property"
+                >
+                  <repetition-line-chart
                     :title="property"
                     :values="getJsonValueByArrayProperty(property)"
                   />
@@ -105,10 +117,18 @@ import Card from "@/components/Cards/Card";
 import BaseInput from "@/components/Inputs/BaseInput";
 import Expand from "@/components/Expand";
 import KeysList from "@/components/KeysList";
-import RepetitionGraph from "@/components/RepetitionGraph";
+import RepetitionBarChart from "@/components/RepetitionBarChart";
+import RepetitionLineChart from "@/components/RepetitionLineChart";
 
 export default {
-  components: { RepetitionGraph, KeysList, Expand, BaseInput, Card },
+  components: {
+    RepetitionLineChart,
+    RepetitionBarChart,
+    KeysList,
+    Expand,
+    BaseInput,
+    Card
+  },
   data() {
     return {
       jsonFile: "",

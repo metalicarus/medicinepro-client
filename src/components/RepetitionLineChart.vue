@@ -1,24 +1,22 @@
 <template>
   <div class="row">
     <div class="col-12" v-if="displayChart">
-      {{ title }}
-      <bar-chart
-        style="height: 150px"
-        :chart-data="blueBarChart.chartData"
-        :gradient-color="blueBarChart.gradientColors"
-        :gradient-stops="blueBarChart.gradientStops"
-        :extra-options="blueBarChart.extraOptions"
+      <line-chart
+        style="height: 250px"
+        :chart-data="purpleLineChart.chartData"
+        :gradient-color="purpleLineChart.gradientColors"
+        :gradient-stops="purpleLineChart.gradientStops"
+        :extra-options="purpleLineChart.extraOptions"
       >
-      </bar-chart>
+      </line-chart>
     </div>
   </div>
 </template>
 
 <script>
-import BarChart from "@/components/Charts/BarChart";
-
+import LineChart from "@/components/Charts/LineChart";
 export default {
-  components: { BarChart },
+  components: { LineChart },
   props: {
     values: {
       type: Array,
@@ -35,11 +33,15 @@ export default {
   data() {
     return {
       displayChart: false,
-      blueBarChart: {
+      purpleLineChart: {
         extraOptions: {
           maintainAspectRatio: false,
           legend: {
-            display: false
+            display: true
+          },
+          title: {
+            display: true,
+            text: this.title
           },
           responsive: true,
           tooltips: {
@@ -87,9 +89,18 @@ export default {
           labels: [],
           datasets: [
             {
-              label: "Countries",
+              label: "Real Data",
               fill: true,
               borderColor: "#1f8ef1",
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              data: []
+            },
+            {
+              label: "CPU",
+              fill: true,
+              borderColor: "#1cde15",
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
@@ -108,7 +119,7 @@ export default {
   },
   methods: {
     initGraph() {
-      this.blueBarChart.chartData.labels = this.values.filter(
+      this.purpleLineChart.chartData.labels = this.values.filter(
         (element, index, self) => {
           return index === self.indexOf(element);
         }
@@ -121,9 +132,12 @@ export default {
       var max = 0;
       Object.getOwnPropertyNames(counts).forEach(e => {
         if (counts[e] > max) max = counts[e];
-        this.blueBarChart.chartData.datasets[0].data.push(counts[e]);
+        this.purpleLineChart.chartData.datasets[0].data.push(counts[e]);
+        this.purpleLineChart.chartData.datasets[1].data.push(
+          counts[e] + Math.floor(Math.random() * 10)
+        );
       });
-      this.blueBarChart.extraOptions.scales.yAxes[0].ticks.suggestedMax =
+      this.purpleLineChart.extraOptions.scales.yAxes[0].ticks.suggestedMax =
         max + 10;
 
       this.displayChart = true;
