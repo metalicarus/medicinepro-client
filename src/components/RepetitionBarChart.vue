@@ -19,7 +19,7 @@ import BarChart from "@/components/Charts/BarChart";
 export default {
   components: { BarChart },
   props: {
-    values: {
+    objects: {
       type: Array,
       required: true
     },
@@ -33,6 +33,15 @@ export default {
   },
   data() {
     return {
+      dataset: {
+        label: "Principal",
+        fill: true,
+        borderColor: "#1f8ef1",
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        data: []
+      },
       displayChart: false,
       blueBarChart: {
         extraOptions: {
@@ -88,26 +97,7 @@ export default {
         },
         chartData: {
           labels: [],
-          datasets: [
-            {
-              label: "Real Data",
-              fill: true,
-              borderColor: "#1f8ef1",
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: []
-            },
-            {
-              label: "CPU",
-              fill: true,
-              borderColor: "#27e288",
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: []
-            }
-          ]
+          datasets: []
         },
         gradientColors: [
           "rgba(29,140,248,0.2)",
@@ -119,29 +109,53 @@ export default {
     };
   },
   methods: {
+    getRandomColor() {
+      var letters = "0123456789ABCDEF";
+      var color = "#";
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    },
     initGraph() {
-      this.blueBarChart.chartData.labels = this.values.filter(
-        (element, index, self) => {
-          return index === self.indexOf(element);
-        }
-      );
-      var counts = {};
-      this.values.forEach(function(x) {
-        counts[x] = (counts[x] || 0) + 1;
-      });
+      if (this.objects.length > 0) {
+        this.objects.forEach(object => {
+          object.value.forEach(v => {
+            if (!this.blueBarChart.chartData.labels.includes(v))
+              this.blueBarChart.chartData.labels.push(v);
+          });
+        });
+        this.objects.forEach(object => {
+          let counts = {};
+          object.value.forEach(function(x) {
+            counts[x] = (counts[x] || 0) + 1;
+          });
+          let ds = { ...this.dataset };
+          ds.label = object.title;
+          ds.borderColor = this.getRandomColor();
+          Object.keys(counts).forEach(e => {
+            ds.data.push(counts[e]);
+          });
+          this.blueBarChart.chartData.datasets.push(ds);
+        });
+        this.displayChart = true;
+      }
 
-      var max = 0;
-      Object.getOwnPropertyNames(counts).forEach(e => {
-        if (counts[e] > max) max = counts[e];
-        this.blueBarChart.chartData.datasets[0].data.push(counts[e]);
-        this.blueBarChart.chartData.datasets[1].data.push(
-          counts[e] + Math.floor(Math.random() * 10)
-        );
-      });
-      this.blueBarChart.extraOptions.scales.yAxes[0].ticks.suggestedMax =
-        max + 10;
+      // var counts = {};
+      // this.values.forEach(function(x) {
+      //   counts[x] = (counts[x] || 0) + 1;
+      // });
 
-      this.displayChart = true;
+      // var max = 0;
+      // Object.getOwnPropertyNames(counts).forEach(e => {
+      //   if (counts[e] > max) max = counts[e];
+      //   this.blueBarChart.chartData.datasets[0].data.push(counts[e]);
+      //   this.blueBarChart.chartData.datasets[1].data.push(
+      //     counts[e] + Math.floor(Math.random() * 10)
+      //   );
+      // });
+      // this.blueBarChart.extraOptions.scales.yAxes[0].ticks.suggestedMax =
+      //   max + 10;
     }
   }
 };

@@ -16,6 +16,8 @@ import i18n from "./i18n";
 import SideBar from "@/components/SidebarPlugin";
 
 Vue.config.productionTip = false;
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 
 // router setup
 import routes from "./router";
@@ -27,6 +29,8 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+Vue.use(Loading);
+
 Vue.use(SocialSharing);
 Vue.use(VueGitHubButtons, { useCache: true });
 Vue.use(GlobalComponents);

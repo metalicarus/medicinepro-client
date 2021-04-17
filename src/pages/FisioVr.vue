@@ -49,12 +49,14 @@
               <div class="row">
                 <div
                   v-for="property in selectedProperties"
-                  class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6"
+                  class="font-icon-list col-3"
                   :key="property"
                 >
                   <div class="font-icon-detail-blue">
-                    <h5>{{ property }}</h5>
-                    <p>{{ getJsonValueByProperty(property) }}</p>
+                    <mini-table
+                      :title="property"
+                      :objects="getJsonValueByPropertyTimeline(property)"
+                    />
                   </div>
                 </div>
               </div>
@@ -66,7 +68,7 @@
                 >
                   <repetition-bar-chart
                     :title="property"
-                    :values="getJsonValueByArrayProperty(property)"
+                    :objects="getJsonValueByPropertyTimeline(property)"
                   />
                 </div>
               </div>
@@ -76,10 +78,10 @@
                   v-for="property in joinProperties"
                   :key="property"
                 >
-                  <repetition-line-chart
-                    :title="property"
-                    :values="getJsonValueByArrayProperty(property)"
-                  />
+                  <!--                  <repetition-line-chart-->
+                  <!--                    :title="property"-->
+                  <!--                    :values="getJsonValueByArrayProperty(property)"-->
+                  <!--                  />-->
                 </div>
               </div>
             </card>
@@ -98,11 +100,11 @@ import KeysList from "@/components/KeysList";
 import RepetitionBarChart from "@/components/RepetitionBarChart";
 import RepetitionLineChart from "@/components/RepetitionLineChart";
 import CardJsonInput from "@/components/CardJsonInput";
-import BaseInput from "@/components/Inputs/BaseInput";
+import MiniTable from "@/components/MiniTable";
 
 export default {
   components: {
-    BaseInput,
+    MiniTable,
     CardJsonInput,
     RepetitionLineChart,
     RepetitionBarChart,
@@ -116,7 +118,14 @@ export default {
       jsonFile: "",
       singleProperties: [],
       selectedProperties: [],
-      joinProperties: []
+      joinProperties: [],
+      objectKeys: [],
+      struct: {
+        title: undefined,
+        subtitle: undefined,
+        value: undefined,
+        isMainValue: false
+      }
     };
   },
   computed: {
@@ -125,17 +134,38 @@ export default {
     }
   },
   methods: {
-    getJsonValueByProperty(property) {
-      return this.jsonFile[property].toString();
+    getJsonValueByPropertyTimeline(property) {
+      let result = [];
+      this.objectKeys.forEach(key => {
+        let clone = { ...this.struct };
+        if (key === "main") {
+          clone.isMainValue = true;
+          clone.title = "principal";
+          clone.value = this.jsonFile[key][property];
+        } else {
+          clone.isMainValue = false;
+          clone.title = "comparável nº" + key;
+          clone.value = this.jsonFile.comparables[key][property];
+        }
+        result.push(clone);
+      });
+      return result;
     },
-    getJsonValueByArrayProperty(property) {
-      return this.jsonFile[property];
-    },
+
     keylist(v) {
       this.selectedProperties = [...v];
     },
     print(e) {
-      console.log(e);
+      this.jsonFile = e;
+      this.objectKeys = ["main", ...Object.keys(e.comparables)];
+      let keys = Object.keys(e.main);
+      keys.forEach(key => {
+        if (!Array.isArray(e.main[key])) {
+          this.singleProperties.push(key);
+        } else {
+          this.joinProperties.push(key);
+        }
+      });
     }
   }
 };

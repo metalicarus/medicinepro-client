@@ -1,59 +1,63 @@
 <template>
-  <card>
-    <template slot="header">
-      <div class="row">
-        <div class="col-sm-6" :class="'text-left'">
-          <h5 class="card-category">{{ subtitle }}</h5>
-          <h2 class="card-title">{{ title }}</h2>
+  <form class="vld-parent" ref="formContainer">
+    <card>
+      <template slot="header">
+        <div class="row">
+          <div class="col-sm-6" :class="'text-left'">
+            <h5 class="card-category">{{ subtitle }}</h5>
+            <h2 class="card-title">{{ title }}</h2>
+          </div>
+        </div>
+      </template>
+      <div class="row" v-if="displayComparableInput">
+        <div class="col-sm-12 col-lg-2">
+          <input
+            type="number"
+            placeholder="Comparable"
+            class="form-control"
+            min="0"
+            v-model="comparableContability"
+          />
         </div>
       </div>
-    </template>
-    <div class="row" v-if="displayComparableInput">
-      <div class="col-sm-12 col-lg-2">
-        <input
-          type="number"
-          placeholder="Comparable"
-          class="form-control"
-          min="0"
-          v-model="comparableContability"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div :class="comparableContability > 0 ? 'col-sm-12 col-lg-6' : 'col-12'">
-        <label class="control-label text-left">Arquivo principal</label>
-        <input
-          type="file"
-          id="main"
-          class="form-control"
-          @change="onFileChange"
-        />
-      </div>
-      <div
-        class="col-lg-6 col-sm-12"
-        v-for="(i, index) in comparableRules"
-        :key="index"
-      >
-        <label class="control-label text-left"
-          >Arquivo comparável nº {{ i }}</label
+      <div class="row">
+        <div
+          :class="comparableContability > 0 ? 'col-sm-12 col-lg-6' : 'col-12'"
         >
-        <input
-          type="file"
-          :id="i"
-          class="form-control"
-          @change="onFileChange"
-          :disabled="comparableDisabled"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <base-button type="info" class="btn-block" @click="process"
-          >Processar...</base-button
+          <label class="control-label text-left">Arquivo principal</label>
+          <input
+            type="file"
+            id="main"
+            class="form-control"
+            @change="onFileChange"
+          />
+        </div>
+        <div
+          class="col-lg-6 col-sm-12"
+          v-for="(i, index) in comparableRules"
+          :key="index"
         >
+          <label class="control-label text-left"
+            >Arquivo comparável nº {{ i }}</label
+          >
+          <input
+            type="file"
+            :id="i"
+            class="form-control"
+            @change="onFileChange"
+            :disabled="comparableDisabled"
+          />
+        </div>
       </div>
-    </div>
-  </card>
+      <div class="row">
+        <div class="col-12">
+          <base-button type="info" simple class="btn-block" @click="process"
+            >Processar...</base-button
+          >
+        </div>
+      </div>
+    </card>
+  </form>
 </template>
 
 <script>
@@ -128,7 +132,6 @@ export default {
           }
         }
       };
-      console.log(this.jsonFiles);
       reader.readAsText(file);
     },
     comparableValidate(json, inputId) {
@@ -146,6 +149,20 @@ export default {
       });
       return result;
     },
+    clear() {
+      document.getElementById("main").value = null;
+      let comparables = Object.keys(this.jsonFiles.comparables);
+      comparables.forEach(comparable => {
+        console.log(comparable);
+        document.getElementById(comparable).value = null;
+      });
+      this.comparableContability = 1;
+      this.comparableDisabled = false;
+      this.jsonFiles = {
+        main: undefined,
+        comparables: []
+      };
+    },
     process() {
       if (this.jsonFiles.main === undefined) {
         this.$notify({
@@ -162,6 +179,15 @@ export default {
         });
       } else {
         this.$emit("submit:form", this.jsonFiles);
+        let loader = this.$loading.show({
+          container: this.$refs.formContainer,
+          canCancel: false,
+          color: "#1d8cf8"
+        });
+        setTimeout(() => {
+          loader.hide();
+          this.clear();
+        }, 5000);
       }
     }
   }

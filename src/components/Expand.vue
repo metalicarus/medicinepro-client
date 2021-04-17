@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <div class="col-12">
-      <card type="nav-tabs" class="text-center">
+    <div class="col-12 text-left">
+      <card type="nav-tabs">
         <h4 class="card-title">{{ title }}</h4>
         <h5 class="card-category">{{ subTitle }}</h5>
         <div :class="expand ? '' : 'hide'">
@@ -10,17 +10,15 @@
       </card>
     </div>
     <div class="col-12">
-      <div class="text-center">
-        <base-button
-          icon
-          simple
-          type="secondary"
-          id="expandBodyButton"
-          @click="expand = !expand"
-        >
-          <i :class="icon"></i>
-        </base-button>
-      </div>
+      <base-button
+        type="info"
+        class="btn-block"
+        simple
+        id="expandBodyButton"
+        @click="expand = !expand"
+      >
+        <i :class="icon"></i>
+      </base-button>
     </div>
   </div>
 </template>
