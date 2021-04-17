@@ -2,34 +2,12 @@
   <div class="content">
     <div class="row">
       <div class="col-12">
-        <card type="">
-          <template slot="header">
-            <div class="row">
-              <div class="col-sm-6" :class="'text-left'">
-                <h5 class="card-category">Seleção do arquivo</h5>
-                <h2 class="card-title">Arquivo JSON</h2>
-              </div>
-            </div>
-          </template>
-          <div class="col-lg-6 col-sm-12 border">
-            <base-input
-              label="Arquivo"
-              type="file"
-              accept="application/JSON"
-              @change="onFileChange"
-              placeholder="Click aqui e selecione o arquivo desejado"
-            >
-              <small slot="helperText" class="form-text text-muted"
-                >Click aqui e selecione o arquivo desejado.</small
-              >
-              <template #helperText>
-                <small class="form-text text-muted"
-                  >Click aqui e selecione o arquivo desejado.</small
-                >
-              </template>
-            </base-input>
-          </div>
-        </card>
+        <card-json-input
+          title="Arquivo Json"
+          subtitle="Seleção dos arquivos"
+          :display-comparable-input="true"
+          @submit:form="print"
+        />
       </div>
     </div>
     <div class="row" v-if="jsonFile !== ''">
@@ -114,55 +92,39 @@
 
 <script>
 import Card from "@/components/Cards/Card";
-import BaseInput from "@/components/Inputs/BaseInput";
+
 import Expand from "@/components/Expand";
 import KeysList from "@/components/KeysList";
 import RepetitionBarChart from "@/components/RepetitionBarChart";
 import RepetitionLineChart from "@/components/RepetitionLineChart";
+import CardJsonInput from "@/components/CardJsonInput";
+import BaseInput from "@/components/Inputs/BaseInput";
 
 export default {
   components: {
+    BaseInput,
+    CardJsonInput,
     RepetitionLineChart,
     RepetitionBarChart,
     KeysList,
     Expand,
-    BaseInput,
     Card
   },
   data() {
     return {
+      comparable: 0,
       jsonFile: "",
       singleProperties: [],
       selectedProperties: [],
       joinProperties: []
     };
   },
+  computed: {
+    toIntComparable() {
+      return parseInt(this.comparable);
+    }
+  },
   methods: {
-    onFileChange(e) {
-      this.jsonFile = "";
-      this.singleProperties = [];
-      this.selectedProperties = [];
-      this.joinProperties = [];
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      this.readFile(files[0]);
-    },
-    readFile(file) {
-      let reader = new FileReader();
-      reader.onload = e => {
-        let json = JSON.parse(e.target.result);
-        this.jsonFile = json;
-        let properties = Object.getOwnPropertyNames(json);
-        properties.forEach(property => {
-          if (Array.isArray(json[property])) {
-            this.joinProperties.push(property);
-          } else {
-            this.singleProperties.push(property);
-          }
-        });
-      };
-      reader.readAsText(file);
-    },
     getJsonValueByProperty(property) {
       return this.jsonFile[property].toString();
     },
@@ -171,6 +133,9 @@ export default {
     },
     keylist(v) {
       this.selectedProperties = [...v];
+    },
+    print(e) {
+      console.log(e);
     }
   }
 };
